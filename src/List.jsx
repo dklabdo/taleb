@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
@@ -8,6 +8,7 @@ import { AppContext } from "./AppProvider";
 const apiLink = import.meta.env.VITE_API_LINK;
 
 function List() {
+  const {setisModifie} = useContext(AppContext)
   const [search, setsearch] = useState("");
   const { data, isLoading, isError } = useQuery({
     queryKey: ["list"],
@@ -18,6 +19,11 @@ function List() {
       return res.data;
     },
   });
+
+
+  useEffect(() => {
+    setisModifie(false)
+  } , [])
 
   const exportMutation = useMutation({
     mutationKey: ["export"],
@@ -164,9 +170,9 @@ function StudentList({ bureau, numeroBureau, code }) {
   }
   return (
     <div className="px-4 rounded-md text-blue-900 even:bg-gray-100  flex flex-col md:flex-row  justify-between  w-full py-6 gap-4">
-      <p className="font-medium text-lg"> {bureau} </p>
-      <p> {numeroBureau} </p>
-      <p> {code} </p>
+      <p className="font-medium w-[35%] text-lg"> {bureau} </p>
+      <p className="w-[10%] " > {numeroBureau} </p>
+      <p className="w-[45%] " > {code} </p>
       <div className="flex gap-6 items-center">
         <button onClick={() => copy()}>
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>

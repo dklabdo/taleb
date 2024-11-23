@@ -14,15 +14,22 @@ function Add() {
     const modifieMutation = useMutation({
         mutationKey : ["modifie"],
         mutationFn : async () => {
+            console.log("test modifie");
+            
             console.log(modifieObj);
+            console.log(`${apiLink}/bureau/${modifieObj.id}`);
             
             const res = await axios.patch(`${apiLink}/bureau/${modifieObj.id}` , {
-                nomBureau : modifieObj.nomBureau,
-                NumeroBureau : modifieObj.NumeroBureau
+                nomBureau : officeName,
+                NumeroBureau : officeNumber
             })
             console.log(res.data);
             return res.data
             
+        },
+        onSuccess : () => {
+            navigate('/list')
+            setisModifie(false)
         }
     })
 
@@ -65,9 +72,9 @@ function Add() {
             <input value={officeNumber} required onChange={(e) => setofficeNumber(e.target.value)} type='number' placeholder='numero de bureau' />
             {
                 isModifie ? (
-                    <button disabled={modifieMutation.isLoading}  className={`text-white p-3 rounded-md bg-blue-900 ${modifieMutation.isLoading ? "bg-gray-400" : "bg-blue-900" }`} > Modifier </button>
+                    <button onClick={() => modifieMutation.mutate()} disabled={modifieMutation.isLoading}  className={`text-white p-3 rounded-md bg-blue-900 ${modifieMutation.isLoading ? "bg-gray-400" : "bg-blue-900" }`} > Modifier </button>
                 ) : (
-                    <button disabled={addMutation.isLoading}  className={`text-white p-3 rounded-md bg-blue-900 ${addMutation.isLoading ? "bg-gray-400" : "bg-blue-900" }`} > Ajouter </button>
+                    <button  disabled={addMutation.isLoading}  className={`text-white p-3 rounded-md bg-blue-900 ${addMutation.isLoading ? "bg-gray-400" : "bg-blue-900" }`} > Ajouter </button>
                 )
             }
         </form>  
